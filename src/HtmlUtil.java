@@ -61,7 +61,7 @@ public class HtmlUtil {
         private void includePage(WikiPage page, String mode) throws Exception {
             WikiPagePath pagePath = crawler.getFullPath(page);
             String pagePathName = PathParser.render(pagePath);
-            buffer.append("!include -" + mode + " .").append(pagePathName).append("\n");
+            buffer.append(String.format("!include -%s .%s\n", mode , pagePathName));
         }
     }
 }
