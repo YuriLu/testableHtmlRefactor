@@ -30,32 +30,27 @@ public class HtmlUtil {
             if (pageData.hasAttribute("Test")) {
                 String mode = "setup";
                 if (includeSuiteSetup) {
-                    WikiPage suiteSetup = PageCrawlerImpl.getInheritedPage(SuiteResponder.SUITE_SETUP_NAME, wikiPage);
-                    if (suiteSetup != null) {
-                        includePage(suiteSetup, mode);
-                    }
+                    includeIfInherited(SuiteResponder.SUITE_SETUP_NAME, mode);
                 }
-                WikiPage setup = PageCrawlerImpl.getInheritedPage("SetUp", wikiPage);
-                if (setup != null) {
-                    includePage(setup, mode);
-                }
+                includeIfInherited("SetUp", mode);
             }
             buffer.append(pageData.getContent()).append("\n");
             if (pageData.hasAttribute("Test")) {
-                WikiPage teardown = PageCrawlerImpl.getInheritedPage("TearDown", wikiPage);
                 String mode = "teardown";
-                if (teardown != null) {
-                    includePage(teardown, mode);
-                }
+                includeIfInherited("TearDown", mode);
                 if (includeSuiteSetup) {
-                    WikiPage suiteTeardown = PageCrawlerImpl.getInheritedPage(SuiteResponder.SUITE_TEARDOWN_NAME, wikiPage);
-                    if (suiteTeardown != null) {
-                        includePage(suiteTeardown, mode);
-                    }
+                    includeIfInherited(SuiteResponder.SUITE_TEARDOWN_NAME, mode);
                 }
             }
             pageData.setContent(buffer.toString());
             return pageData.getHtml();
+        }
+
+        private void includeIfInherited(String pageName, String mode) throws Exception {
+            WikiPage suiteSetup = PageCrawlerImpl.getInheritedPage(pageName, wikiPage);
+            if (suiteSetup != null) {
+                includePage(suiteSetup, mode);
+            }
         }
 
         private void includePage(WikiPage page, String mode) throws Exception {
