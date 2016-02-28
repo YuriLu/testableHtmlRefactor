@@ -47,9 +47,9 @@ public class HtmlUtil {
         }
 
         private void includeIfInherited(String pageName, String mode) throws Exception {
-            WikiPage suiteSetup = PageCrawlerImpl.getInheritedPage(pageName, wikiPage);
-            if (suiteSetup != null) {
-                includePage(suiteSetup, mode);
+            WikiPage page = PageCrawlerImpl.getInheritedPage(pageName, wikiPage);
+            if (page != null) {
+                includePage(page, mode);
             }
         }
 
