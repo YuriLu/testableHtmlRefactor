@@ -27,21 +27,25 @@ public class HtmlUtil {
         }
         
         public String invoke() throws Exception{
-            if (pageData.hasAttribute("Test")) {
-                String mode = "setup";
-                if (includeSuiteSetup)
-                    includeIfInherited(SuiteResponder.SUITE_SETUP_NAME, mode);
-                includeIfInherited("SetUp", mode);
-            }
+            if (pageData.hasAttribute("Test"))
+                includeSetups();
             buffer.append(pageData.getContent()).append("\n");
-            if (pageData.hasAttribute("Test")) {
-                String mode = "teardown";
-                includeIfInherited("TearDown", mode);
-                if (includeSuiteSetup) 
-                    includeIfInherited(SuiteResponder.SUITE_TEARDOWN_NAME, mode);
-            }
+            if (pageData.hasAttribute("Test"))
+                includeTeardowns();
             pageData.setContent(buffer.toString());
             return pageData.getHtml();
+        }
+
+        private void includeTeardowns() throws Exception {
+            includeIfInherited("TearDown", "teardown");
+            if (includeSuiteSetup)
+                includeIfInherited(SuiteResponder.SUITE_TEARDOWN_NAME, "teardown");
+        }
+
+        private void includeSetups() throws Exception {
+            if (includeSuiteSetup)
+                includeIfInherited(SuiteResponder.SUITE_SETUP_NAME, "setup");
+            includeIfInherited("SetUp", "setup");
         }
 
         private void includeIfInherited(String pageName, String mode) throws Exception {
