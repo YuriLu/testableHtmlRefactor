@@ -8,17 +8,17 @@ import fitnesse.wiki.WikiPagePath;
 
 public class HtmlUtil {
     public static String testableHtml (PageData pageData, boolean includeSuiteSetup) throws Exception {
-       return new TestableHtmlMaker(pageData, includeSuiteSetup).invoke();
+       return new SetupTeardownSurrounder(pageData, includeSuiteSetup).surround();
     } 
     
-    private static class TestableHtmlMaker{
+    private static class SetupTeardownSurrounder{
         private PageData pageData;
         private boolean includeSuiteSetup;
         private String content;
         private WikiPage wikiPage;
         private PageCrawler crawler;
         
-        public TestableHtmlMaker(PageData pageData, boolean includeSuiteSetup){
+        public SetupTeardownSurrounder(PageData pageData, boolean includeSuiteSetup){
             content = "";
             wikiPage = pageData.getWikiPage();
             crawler = wikiPage.getPageCrawler();
@@ -26,7 +26,7 @@ public class HtmlUtil {
             this.includeSuiteSetup = includeSuiteSetup;
         }
         
-        public String invoke() throws Exception{
+        public String surround() throws Exception{
             if (isTestPage()){
                 surroundPageWithSetupsAndTeardowns();
             }
