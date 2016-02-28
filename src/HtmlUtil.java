@@ -27,13 +27,21 @@ public class HtmlUtil {
         }
         
         public String invoke() throws Exception{
-            if (pageData.hasAttribute("Test"))
-                content += includeSetups();
-            content += pageData.getContent() + "\n";
-            if (pageData.hasAttribute("Test"))
-                content += includeTeardowns();
-            pageData.setContent(content.toString());
+            if (isTestPage()){
+                surroundPageWithSetupsAndTeardowns();
+            }
             return pageData.getHtml();
+        }
+
+        private void surroundPageWithSetupsAndTeardowns() throws Exception {
+            content += includeSetups();
+            content += pageData.getContent() + "\n";
+            content += includeTeardowns();
+            pageData.setContent(content);
+        }
+
+        private boolean isTestPage() throws Exception {
+            return pageData.hasAttribute("Test");
         }
 
         private String includeTeardowns() throws Exception {
