@@ -15,13 +15,13 @@ public class HtmlUtil {
         private boolean includeSuiteSetup;
         
         public TestableHtmlMaker(PageData pageData, boolean includeSuiteSetup){
+            buffer = new StringBuffer();
+            wikiPage = pageData.getWikiPage();
             this.pageData = pageData;
             this.includeSuiteSetup = includeSuiteSetup;
         }
         
         public String invoke() throws Exception{
-            WikiPage wikiPage = pageData.getWikiPage();
-            StringBuffer buffer = new StringBuffer();
             if (pageData.hasAttribute("Test")) {
                 if (includeSuiteSetup) {
                     WikiPage suiteSetup = PageCrawlerImpl.getInheritedPage(SuiteResponder.SUITE_SETUP_NAME, wikiPage);
@@ -58,5 +58,7 @@ public class HtmlUtil {
             pageData.setContent(buffer.toString());
             return pageData.getHtml();
         }
+        private StringBuffer buffer;
+        private WikiPage wikiPage;
     }
 }
