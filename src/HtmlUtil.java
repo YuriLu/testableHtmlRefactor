@@ -29,18 +29,16 @@ public class HtmlUtil {
         public String invoke() throws Exception{
             if (pageData.hasAttribute("Test")) {
                 String mode = "setup";
-                if (includeSuiteSetup) {
+                if (includeSuiteSetup)
                     includeIfInherited(SuiteResponder.SUITE_SETUP_NAME, mode);
-                }
                 includeIfInherited("SetUp", mode);
             }
             buffer.append(pageData.getContent()).append("\n");
             if (pageData.hasAttribute("Test")) {
                 String mode = "teardown";
                 includeIfInherited("TearDown", mode);
-                if (includeSuiteSetup) {
+                if (includeSuiteSetup) 
                     includeIfInherited(SuiteResponder.SUITE_TEARDOWN_NAME, mode);
-                }
             }
             pageData.setContent(buffer.toString());
             return pageData.getHtml();
@@ -48,9 +46,8 @@ public class HtmlUtil {
 
         private void includeIfInherited(String pageName, String mode) throws Exception {
             WikiPage page = PageCrawlerImpl.getInheritedPage(pageName, wikiPage);
-            if (page != null) {
+            if (page != null)
                 buffer.append(includePage(page, mode));
-            }
         }
 
         private String includePage(WikiPage page, String mode) throws Exception {
