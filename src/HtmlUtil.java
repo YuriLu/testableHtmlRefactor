@@ -43,13 +43,13 @@ public class HtmlUtil {
                     buffer.append("!include -setup .").append(setupPathName).append("\n");
                 }
             }
-            buffer.append(pageData.getContent());
+            buffer.append(pageData.getContent()).append("\n");
             if (pageData.hasAttribute("Test")) {
                 WikiPage teardown = PageCrawlerImpl.getInheritedPage("TearDown", wikiPage);
                 if (teardown != null) {
                     WikiPagePath tearDownPath = crawler.getFullPath(teardown);
                     String tearDownPathName = PathParser.render(tearDownPath);
-                    buffer.append("\n").append("!include -teardown .").append(tearDownPathName).append("\n");
+                    buffer.append("!include -teardown .").append(tearDownPathName).append("\n");
                 }
                 if (includeSuiteSetup) {
                     WikiPage suiteTeardown = PageCrawlerImpl.getInheritedPage(SuiteResponder.SUITE_TEARDOWN_NAME, wikiPage);
