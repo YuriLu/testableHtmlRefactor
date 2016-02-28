@@ -14,12 +14,12 @@ public class HtmlUtil {
     private static class TestableHtmlMaker{
         private PageData pageData;
         private boolean includeSuiteSetup;
-        private StringBuffer buffer;
+        private String content;
         private WikiPage wikiPage;
         private PageCrawler crawler;
         
         public TestableHtmlMaker(PageData pageData, boolean includeSuiteSetup){
-            buffer = new StringBuffer();
+            content = "";
             wikiPage = pageData.getWikiPage();
             crawler = wikiPage.getPageCrawler();
             this.pageData = pageData;
@@ -29,29 +29,30 @@ public class HtmlUtil {
         public String invoke() throws Exception{
             if (pageData.hasAttribute("Test"))
                 includeSetups();
-            buffer.append(pageData.getContent()).append("\n");
+            content += pageData.getContent() + "\n";
             if (pageData.hasAttribute("Test"))
                 includeTeardowns();
-            pageData.setContent(buffer.toString());
+            pageData.setContent(content.toString());
             return pageData.getHtml();
         }
 
         private void includeTeardowns() throws Exception {
-            includeIfInherited("TearDown", "teardown");
+            content += includeIfInherited("TearDown", "teardown");
             if (includeSuiteSetup)
-                includeIfInherited(SuiteResponder.SUITE_TEARDOWN_NAME, "teardown");
+                content += includeIfInherited(SuiteResponder.SUITE_TEARDOWN_NAME, "teardown");
         }
 
         private void includeSetups() throws Exception {
             if (includeSuiteSetup)
-                includeIfInherited(SuiteResponder.SUITE_SETUP_NAME, "setup");
-            includeIfInherited("SetUp", "setup");
+                content += includeIfInherited(SuiteResponder.SUITE_SETUP_NAME, "setup");
+            content += includeIfInherited("SetUp", "setup");
         }
 
-        private void includeIfInherited(String pageName, String mode) throws Exception {
+        private String includeIfInherited(String pageName, String mode) throws Exception {
             WikiPage page = PageCrawlerImpl.getInheritedPage(pageName, wikiPage);
             if (page != null)
-                buffer.append(includePage(page, mode));
+                return includePage(page, mode);
+            return "";
         }
 
         private String includePage(WikiPage page, String mode) throws Exception {
