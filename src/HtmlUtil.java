@@ -28,24 +28,28 @@ public class HtmlUtil {
         
         public String invoke() throws Exception{
             if (pageData.hasAttribute("Test"))
-                includeSetups();
+                content += includeSetups();
             content += pageData.getContent() + "\n";
             if (pageData.hasAttribute("Test"))
-                includeTeardowns();
+                content += includeTeardowns();
             pageData.setContent(content.toString());
             return pageData.getHtml();
         }
 
-        private void includeTeardowns() throws Exception {
-            content += includeIfInherited("TearDown", "teardown");
+        private String includeTeardowns() throws Exception {
+            String teardowns = "";
+            teardowns += includeIfInherited("TearDown", "teardown");
             if (includeSuiteSetup)
-                content += includeIfInherited(SuiteResponder.SUITE_TEARDOWN_NAME, "teardown");
+                teardowns += includeIfInherited(SuiteResponder.SUITE_TEARDOWN_NAME, "teardown");
+            return teardowns;
         }
 
-        private void includeSetups() throws Exception {
+        private String includeSetups() throws Exception {
+            String setups = "";
             if (includeSuiteSetup)
-                content += includeIfInherited(SuiteResponder.SUITE_SETUP_NAME, "setup");
-            content += includeIfInherited("SetUp", "setup");
+                setups += includeIfInherited(SuiteResponder.SUITE_SETUP_NAME, "setup");
+            setups += includeIfInherited("SetUp", "setup");
+            return setups;
         }
 
         private String includeIfInherited(String pageName, String mode) throws Exception {
