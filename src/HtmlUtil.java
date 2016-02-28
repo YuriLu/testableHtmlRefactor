@@ -49,14 +49,14 @@ public class HtmlUtil {
         private void includeIfInherited(String pageName, String mode) throws Exception {
             WikiPage page = PageCrawlerImpl.getInheritedPage(pageName, wikiPage);
             if (page != null) {
-                includePage(page, mode);
+                buffer.append(includePage(page, mode));
             }
         }
 
-        private void includePage(WikiPage page, String mode) throws Exception {
+        private String includePage(WikiPage page, String mode) throws Exception {
             WikiPagePath pagePath = crawler.getFullPath(page);
             String pagePathName = PathParser.render(pagePath);
-            buffer.append(String.format("!include -%s .%s\n", mode , pagePathName));
+            return String.format("!include -%s .%s\n", mode , pagePathName);
         }
     }
 }
